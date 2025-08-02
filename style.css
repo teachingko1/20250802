@@ -1,0 +1,135 @@
+/* 커스텀 스타일 - Tailwind CSS와 함께 사용 */
+
+/* 글래스모피즘 효과 강화 */
+.backdrop-blur-lg {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+/* 애니메이션 효과 */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* 호버 효과 강화 */
+.hover\:scale-105:hover {
+    transform: scale(1.05);
+}
+
+.hover\:scale-105 {
+    transition: transform 0.3s ease;
+}
+
+/* 체크박스 커스텀 스타일 */
+input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 2px solid #d1d5db;
+    border-radius: 0.5rem;
+    background-color: white;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+input[type="checkbox"]:checked {
+    background-color: #6366f1;
+    border-color: #6366f1;
+}
+
+input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 0.875rem;
+    font-weight: bold;
+}
+
+input[type="checkbox"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+/* 스크롤바 커스텀 스타일 */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* 반응형 디자인 보완 */
+@media (max-width: 640px) {
+    .container {
+        padding: 1rem;
+    }
+    
+    .text-5xl {
+        font-size: 2.5rem;
+    }
+    
+    .text-2xl {
+        font-size: 1.5rem;
+    }
+    
+    .p-8 {
+        padding: 1.5rem;
+    }
+    
+    .grid-cols-3 {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+    
+    .flex {
+        flex-direction: column;
+    }
+    
+    .gap-4 {
+        gap: 1rem;
+    }
+}
+
+/* 다크모드 지원 (선택사항) */
+@media (prefers-color-scheme: dark) {
+    .bg-white\/95 {
+        background-color: rgba(17, 24, 39, 0.95);
+    }
+    
+    .text-gray-800 {
+        color: #f3f4f6;
+    }
+    
+    .text-gray-600 {
+        color: #d1d5db;
+    }
+    
+    .border-gray-200 {
+        border-color: #374151;
+    }
+}
