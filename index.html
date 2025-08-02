@@ -3,122 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>오늘 해야하는 일 관리앱</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Weather Pro - 날씨 정보 앱</title>
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 min-h-screen">
-    <div class="container mx-auto px-4 py-8 max-w-4xl">
-        <!-- 헤더 섹션 -->
-        <header class="text-center mb-8">
-            <div class="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20 shadow-2xl">
-                <h1 class="text-5xl font-bold text-white mb-4 flex items-center justify-center gap-4">
-                    <i class="fas fa-tasks text-yellow-400 animate-pulse"></i>
-                    할일 관리
-                </h1>
-                <p class="text-xl text-white/80 font-light">오늘의 할일을 체계적으로 관리하세요</p>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-background">
+        <div class="bg-circle bg-circle-1"></div>
+        <div class="bg-circle bg-circle-2"></div>
+        <div class="bg-circle bg-circle-3"></div>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-container">
+                <i class="fas fa-cloud-sun"></i>
+            </div>
+            <h1 class="main-title">Weather Pro</h1>
+            <p class="subtitle">실시간 날씨 정보와 예보를 확인하세요</p>
+            
+            <!-- Search Container -->
+            <div class="search-wrapper">
+                <div class="search-container">
+                    <div class="search-glow"></div>
+                    <div class="search-box">
+                        <input 
+                            type="text" 
+                            id="cityInput" 
+                            placeholder="도시명을 입력하세요 (예: 서울, 부산, Busan, Seoul)..." 
+                            class="search-input"
+                        />
+                        <button id="searchBtn" class="search-button">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
         </header>
 
-        <!-- 격언 섹션 -->
-        <div class="mb-8">
-            <div class="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20 shadow-2xl hover:scale-105 transition-transform duration-300">
-                <div class="text-center">
-                    <i class="fas fa-quote-left text-4xl text-yellow-400 mb-4 opacity-80"></i>
-                    <p class="text-2xl font-medium text-white mb-3 italic leading-relaxed" id="quoteText">시간은 가장 귀중한 자본이다.</p>
-                    <p class="text-lg text-white/70 font-light" id="quoteAuthor">- 테오프라스토스</p>
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Loading State -->
+            <div id="loading" class="loading hidden">
+                <div class="loading-container">
+                    <div class="loading-icon">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <p class="loading-text">날씨 정보를 가져오는 중...</p>
                 </div>
             </div>
-        </div>
 
-        <!-- 메인 컨테이너 -->
-        <div class="bg-white/95 backdrop-blur-lg rounded-3xl p-8 shadow-2xl border border-white/20">
-            <!-- 입력 섹션 -->
-            <div class="mb-8">
-                <div class="flex gap-4 mb-4">
-                    <div class="flex-1 relative">
-                        <input type="text" id="todoInput" 
-                               class="w-full px-6 py-4 text-lg border-2 border-gray-200 rounded-2xl focus:border-indigo-500 focus:ring-4 focus:ring-indigo-200 transition-all duration-300 outline-none"
-                               placeholder="할일을 입력하세요..." maxlength="100">
-                        <div class="absolute right-4 top-1/2 transform -translate-y-1/2">
-                            <span class="text-gray-400 text-sm" id="charCount">0/100</span>
+            <!-- Weather Info -->
+            <div id="weatherInfo" class="weather-info hidden">
+                <!-- Current Weather Card -->
+                <div class="weather-card current-weather-card">
+                    <div class="card-glow"></div>
+                    <div class="card-content">
+                        <div class="weather-grid">
+                            <!-- Location Info -->
+                            <div class="location-info">
+                                <h2 id="cityName" class="city-name"></h2>
+                                <p id="country" class="country-name"></p>
+                                <div class="datetime-info">
+                                    <div class="time-info">
+                                        <i class="fas fa-clock"></i>
+                                        <span id="currentTime"></span>
+                                    </div>
+                                    <div class="date-info">
+                                        <i class="fas fa-calendar"></i>
+                                        <span id="currentDate"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Weather Main -->
+                            <div class="weather-main">
+                                <div class="weather-icon-container">
+                                    <i id="weatherIcon" class="weather-icon"></i>
+                                    <p id="weatherDescription" class="weather-description"></p>
+                                </div>
+                                <div class="temperature-display">
+                                    <span id="temperature" class="temperature"></span>
+                                    <span class="temperature-unit">°C</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <button id="addBtn" class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-8 py-4 rounded-2xl font-semibold text-lg transition-all duration-300 hover:scale-105 hover:shadow-lg flex items-center gap-2">
-                        <i class="fas fa-plus"></i>
-                        추가
-                    </button>
                 </div>
-                <div class="text-center">
-                    <span class="text-gray-600 font-medium text-lg" id="currentDate"></span>
+
+                <!-- Weather Details Grid -->
+                <div class="weather-details-grid">
+                    <div class="detail-card">
+                        <div class="detail-icon-container detail-icon-red">
+                            <i class="fas fa-thermometer-half"></i>
+                        </div>
+                        <div class="detail-content">
+                            <p class="detail-label">체감온도</p>
+                            <p id="feelsLike" class="detail-value"></p>
+                        </div>
+                    </div>
+
+                    <div class="detail-card">
+                        <div class="detail-icon-container detail-icon-blue">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                        <div class="detail-content">
+                            <p class="detail-label">습도</p>
+                            <p id="humidity" class="detail-value"></p>
+                        </div>
+                    </div>
+
+                    <div class="detail-card">
+                        <div class="detail-icon-container detail-icon-green">
+                            <i class="fas fa-wind"></i>
+                        </div>
+                        <div class="detail-content">
+                            <p class="detail-label">풍속</p>
+                            <p id="windSpeed" class="detail-value"></p>
+                        </div>
+                    </div>
+
+                    <div class="detail-card">
+                        <div class="detail-icon-container detail-icon-yellow">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="detail-content">
+                            <p class="detail-label">가시거리</p>
+                            <p id="visibility" class="detail-value"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Forecast Section -->
+                <div class="forecast-section">
+                    <div class="forecast-card">
+                        <div class="card-glow forecast-glow"></div>
+                        <div class="card-content">
+                            <h3 class="forecast-title">
+                                <i class="fas fa-calendar-alt"></i>
+                                3일 예보
+                            </h3>
+                            <div id="forecastContainer" class="forecast-container">
+                                <!-- Forecast items will be dynamically added here -->
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- 필터 버튼 -->
-            <div class="flex justify-center gap-3 mb-8">
-                <button class="filter-btn bg-indigo-100 text-indigo-700 px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:bg-indigo-200 active" data-filter="all">
-                    <i class="fas fa-list mr-2"></i>전체
-                </button>
-                <button class="filter-btn bg-yellow-100 text-yellow-700 px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:bg-yellow-200" data-filter="pending">
-                    <i class="fas fa-clock mr-2"></i>진행중
-                </button>
-                <button class="filter-btn bg-green-100 text-green-700 px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:bg-green-200" data-filter="completed">
-                    <i class="fas fa-check mr-2"></i>완료
-                </button>
-            </div>
-
-            <!-- 통계 -->
-            <div class="grid grid-cols-3 gap-6 mb-8">
-                <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-center text-white shadow-lg">
-                    <div class="text-3xl font-bold mb-2" id="totalCount">0</div>
-                    <div class="text-blue-100 font-medium">전체</div>
-                </div>
-                <div class="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-2xl p-6 text-center text-white shadow-lg">
-                    <div class="text-3xl font-bold mb-2" id="pendingCount">0</div>
-                    <div class="text-yellow-100 font-medium">진행중</div>
-                </div>
-                <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-6 text-center text-white shadow-lg">
-                    <div class="text-3xl font-bold mb-2" id="completedCount">0</div>
-                    <div class="text-green-100 font-medium">완료</div>
+            <!-- Error State -->
+            <div id="error" class="error hidden">
+                <div class="error-container">
+                    <div class="error-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <p id="errorMessage" class="error-text"></p>
                 </div>
             </div>
+        </main>
 
-            <!-- 할일 리스트 -->
-            <ul id="todoList" class="space-y-4 mb-8">
-                <!-- 할일 항목들이 여기에 동적으로 추가됩니다 -->
-            </ul>
-
-            <!-- 빈 상태 -->
-            <div class="empty-state text-center py-12 hidden" id="emptyState">
-                <div class="bg-gray-50 rounded-3xl p-12">
-                    <i class="fas fa-clipboard-list text-6xl text-gray-300 mb-6"></i>
-                    <h3 class="text-2xl font-semibold text-gray-600 mb-2">할일이 없습니다</h3>
-                    <p class="text-gray-500">새로운 할일을 추가해보세요!</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- 액션 버튼 -->
-        <div class="flex justify-center gap-4 mt-8">
-            <button id="clearCompleted" class="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-8 py-4 rounded-2xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg flex items-center gap-2">
-                <i class="fas fa-trash"></i>
-                완료된 항목 삭제
-            </button>
-            <button id="clearAll" class="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-8 py-4 rounded-2xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg flex items-center gap-2">
-                <i class="fas fa-trash-alt"></i>
-                전체 삭제
-            </button>
-        </div>
+        <!-- Footer -->
+        <footer class="footer">
+            <p>© 2024 Weather Pro. Powered by WeatherAPI.com</p>
+        </footer>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
